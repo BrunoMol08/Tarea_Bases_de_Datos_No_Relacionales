@@ -15,3 +15,4 @@ db.restaurants.find({"cuisine":{$not:/American/},"grades.score":{$gt:70},"addres
 ```javascript
 db.restaurants.find({"cuisine":{$not:/(American|Hamburgers)/}, "grades.grade":'A', "borough":{$ne:'Brooklyn'}},{"cuisine":1, "grades.grade":1, "borough":1}).sort({"cuisine":-1})
 ```
+14. Escribe una función find() para encontrar el ID del restaurante, el nombre, el municipio y la cocina de aquellos restaurantes que contienen 'Wil' como las primeras tres letras de su nombre.
