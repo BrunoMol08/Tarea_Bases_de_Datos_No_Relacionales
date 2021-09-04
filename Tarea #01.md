@@ -38,3 +38,21 @@ db.restaurants.find({"name":/Reg/},{"restaurant_id":1, "name":1, "borough":1, "c
 ```javascript
 db.restaurants.find({"borough":'Bronx', "cuisine":/^(American|Hamburgers|Chinese)/},{"borough":1, "cuisine":1})
 ```
+
+18. Escribe una función find() para encontrar la identificación del restaurante, el nombre, el municipio y la cocina de los restaurantes que pertenecen al municipio de Staten Island o Queens o Bronx or Brooklyn.
+
+```javascript
+db.restaurants.find({"borough":/^(Staten Island$|Queens|Bronx|Brooklyn)/},{"restaurant_id":1, "name":1, "borough":1, "cuisine":1})
+```
+
+19. Escribe una función find() para encontrar el ID del restaurante, el nombre, el municipio y la cocina de aquellos restaurantes que no pertenecen al municipio de Staten Island o Queens o Bronx or Brooklyn.
+
+```javascript
+db.restaurants.find({"borough":{$not:/^(Staten Island$|Queens|Bronx|Brooklyn)/}},{"restaurant_id":1, "name":1, "borough":1, "cuisine":1})
+```
+
+20. Escribe una función find() para encontrar el ID del restaurante, el nombre, el municipio y la cocina de aquellos restaurantes que obtuvieron una puntuación que no sea superior a 10.
+
+```javascript
+db.restaurants.find({"grades.score":{$lt:10}},{"restaurant_id":1,"name":1,"borough":1,"cuisine":1,"grades.score":1})
+```
