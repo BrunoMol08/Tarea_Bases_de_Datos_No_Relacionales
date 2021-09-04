@@ -100,3 +100,13 @@ db.restaurants.find().sort({"cuisine":1,"borough":-1})
 ```
 
 28. Escribe una función find() para saber si todas las direcciones contienen la calle o no.
+
+```javascript
+db.restaurants.find({"address.street":{$exists:true}},{"address.street":1})
+```
+
+29. Escribe una función find() que seleccionará todos los documentos de la colección de restaurantes donde el valor del campo coord es Double.
+
+```javascript
+db.restaurants.find({"address.coord":{$type:1}})
+```
