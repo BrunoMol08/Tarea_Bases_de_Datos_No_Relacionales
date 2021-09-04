@@ -15,6 +15,7 @@ db.restaurants.find({"cuisine":{$not:/American/},"grades.score":{$gt:70},"addres
 ```javascript
 db.restaurants.find({"cuisine":{$not:/(American|Hamburgers)/}, "grades.grade":'A', "borough":{$ne:'Brooklyn'}},{"cuisine":1, "grades.grade":1, "borough":1}).sort({"cuisine":-1})
 ```
+> Se contemplo 'Hamburgers' en este caso, puesto que, es comida americana.
 
 14. Escribe una función find() para encontrar el ID del restaurante, el nombre, el municipio y la cocina de aquellos restaurantes que contienen 'Wil' como las primeras tres letras de su nombre.
 
@@ -38,6 +39,8 @@ db.restaurants.find({"name":/Reg/},{"restaurant_id":1, "name":1, "borough":1, "c
 ```javascript
 db.restaurants.find({"borough":'Bronx', "cuisine":/^(American|Hamburgers|Chinese)/},{"borough":1, "cuisine":1})
 ```
+
+> Se contemplo 'Hamburgers' en este caso, puesto que, es comida americana.
 
 18. Escribe una función find() para encontrar la identificación del restaurante, el nombre, el municipio y la cocina de los restaurantes que pertenecen al municipio de Staten Island o Queens o Bronx or Brooklyn.
 
