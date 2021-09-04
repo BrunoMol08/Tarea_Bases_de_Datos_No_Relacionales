@@ -42,43 +42,43 @@ db.restaurants.find({"borough":'Bronx', "cuisine":/^(American|Hamburgers|Chinese
 18. Escribe una función find() para encontrar la identificación del restaurante, el nombre, el municipio y la cocina de los restaurantes que pertenecen al municipio de Staten Island o Queens o Bronx or Brooklyn.
 
 ```javascript
-db.restaurants.find({"borough":/^(Staten Island$|Queens|Bronx|Brooklyn)/},{"restaurant_id":1, "name":1, "borough":1, "cuisine":1})
+db.restaurants.find({"borough":/^(Staten Island$|Queens|Bronx|Brooklyn)/},{"restaurant_id":1, "name":1, "borough":1, "cuisine":1,"_id":0})
 ```
 
 19. Escribe una función find() para encontrar el ID del restaurante, el nombre, el municipio y la cocina de aquellos restaurantes que no pertenecen al municipio de Staten Island o Queens o Bronx or Brooklyn.
 
 ```javascript
-db.restaurants.find({"borough":{$not:/^(Staten Island$|Queens|Bronx|Brooklyn)/}},{"restaurant_id":1, "name":1, "borough":1, "cuisine":1})
+db.restaurants.find({"borough":{$not:/^(Staten Island$|Queens|Bronx|Brooklyn)/}},{"restaurant_id":1, "name":1, "borough":1, "cuisine":1,"_id":0})
 ```
 
 20. Escribe una función find() para encontrar el ID del restaurante, el nombre, el municipio y la cocina de aquellos restaurantes que obtuvieron una puntuación que no sea superior a 10.
 
 ```javascript
-db.restaurants.find({"grades.score":{$lt:10}},{"restaurant_id":1,"name":1,"borough":1,"cuisine":1,"grades.score":1})
+db.restaurants.find({"grades.score":{$lt:10}},{"restaurant_id":1,"name":1,"borough":1,"cuisine":1,"grades.score":1,"_id":0})
 ```
 
 21. Escribe una función find() para encontrar el ID del restaurante, el nombre, el municipio y la cocina de aquellos restaurantes que prepararon platos excepto 'Americano' y 'Chinees' o el nombre del restaurante comienza con la letra 'Wil'.
 
 ```javascript
-db.restaurants.find({"cuisine":{$not:/^(American|Chinese)/},"name":{$not:/^Wil/}},{"restaurant_id":1,"name":1,"borough":1,"cuisine":1})
+db.restaurants.find({"cuisine":{$not:/^(American|Chinese)/},"name":{$not:/^Wil/}},{"restaurant_id":1,"name":1,"borough":1,"cuisine":1,"_id":0})
 ```
 
 22. Escribe una función find() para encontrar el ID del restaurante, el nombre y las calificaciones de los restaurantes que obtuvieron una calificación de "A" y obtuvieron una puntuación de 11 en un ISODate "2014-08-11T00: 00: 00Z" entre muchas de las fechas de la encuesta.
 
 ```javascript
-db.restaurants.find({"grades":{$elemMatch:{"grade":'A',"date":ISODate("2014-08-11T00:00:00.000Z")}}},{"restaurant_id":1,"name":1,"grades":1})
+db.restaurants.find({"grades":{$elemMatch:{"grade":'A',"date":ISODate("2014-08-11T00:00:00.000Z")}}},{"restaurant_id":1,"name":1,"grades":1,"_id":0})
 ```
 
 23. Escribe una función find() para encontrar el ID del restaurante, el nombre y las calificaciones de aquellos restaurantes donde el segundo elemento de la matriz de calificaciones contiene una calificación de "A" y una puntuación de 9 en un ISODate "2014-08-11T00: 00: 00Z".
 
 ```javascript
-db.restaurants.find({"grades.1.grade":'A',"grades.1.date":ISODate("2014-08-11T00:00:00.000Z"),"grades.1.score":9},{"restaurant_id":1,"name":1,"grades":1})
+db.restaurants.find({"grades.1.grade":'A',"grades.1.date":ISODate("2014-08-11T00:00:00.000Z"),"grades.1.score":9},{"restaurant_id":1,"name":1,"grades":1,"_id":0})
 ```
 
 24. Escribe una función find() para encontrar el ID del restaurante, el nombre, la dirección y la ubicación geográfica para aquellos restaurantes donde el segundo elemento de la matriz de coordenadas contiene un valor que sea más de 42 y hasta 52 ..
 
 ```javascript
-db.restaurants.find({"address.coord.1":{$gte:42,$lte:52}},{"restaurant_id":1,"name":1,"address":1})
+db.restaurants.find({"address.coord.1":{$gte:42,$lte:52}},{"restaurant_id":1,"name":1,"address":1,"_id":0})
 ```
 
 25. Escribe una función find() para organizar el nombre de los restaurantes en orden ascendente junto con todas las columnas.
@@ -109,4 +109,16 @@ db.restaurants.find({"address.street":{$exists:true}},{"address.street":1})
 
 ```javascript
 db.restaurants.find({"address.coord":{$type:1}})
+```
+
+30. Escribe una función find() que seleccionará el ID del restaurante, el nombre y las calificaciones para esos restaurantes que devuelve 0 como resto después de dividir la puntuación por 7.
+
+```javascript
+db.restaurants.find({"grades.score":{$mod:[7,0]}},{"restaurante_id":1,"name":1,"grades":1,"_id":0})
+```
+
+31. Escribe una función find() para encontrar el nombre del restaurante, el municipio, la longitud y la altitud y la cocina de aquellos restaurantes que contienen "mon" como tres letras en algún lugar de su nombre.
+
+```javascript
+db.restaurants.find({"name":/mon/},{"name":1,"borough":1,"address.coord":1,"cuisine":1,"_id":0})
 ```
