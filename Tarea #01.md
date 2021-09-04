@@ -56,3 +56,21 @@ db.restaurants.find({"borough":{$not:/^(Staten Island$|Queens|Bronx|Brooklyn)/}}
 ```javascript
 db.restaurants.find({"grades.score":{$lt:10}},{"restaurant_id":1,"name":1,"borough":1,"cuisine":1,"grades.score":1})
 ```
+
+21. Escribe una función find() para encontrar el ID del restaurante, el nombre, el municipio y la cocina de aquellos restaurantes que prepararon platos excepto 'Americano' y 'Chinees' o el nombre del restaurante comienza con la letra 'Wil'.
+
+```javascript
+db.restaurants.find({"cuisine":{$not:/^(American|Chinese)/},"name":{$not:/^Wil/}},{"restaurant_id":1,"name":1,"borough":1,"cuisine":1})
+```
+
+22. Escribe una función find() para encontrar el ID del restaurante, el nombre y las calificaciones de los restaurantes que obtuvieron una calificación de "A" y obtuvieron una puntuación de 11 en un ISODate "2014-08-11T00: 00: 00Z" entre muchas de las fechas de la encuesta.
+
+```javascript
+db.restaurants.find({"grades":{$elemMatch:{"grade":'A',"date":ISODate("2014-08-11T00:00:00.000Z")}}},{"restaurant_id":1,"name":1,"grades":1})
+```
+
+23. Escribe una función find() para encontrar el ID del restaurante, el nombre y las calificaciones de aquellos restaurantes donde el segundo elemento de la matriz de calificaciones contiene una calificación de "A" y una puntuación de 9 en un ISODate "2014-08-11T00: 00: 00Z".
+
+```javascript
+db.restaurants.find({"grades.1":{$elemMatch:{"date":ISODate("2014-08-11T00:00:00.000Z"),"grade":'A',"score":9}}},{"restaurant_id":1,"name":1,"grades":1})
+```
