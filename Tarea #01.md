@@ -74,3 +74,29 @@ db.restaurants.find({"grades":{$elemMatch:{"grade":'A',"date":ISODate("2014-08-1
 ```javascript
 db.restaurants.find({"grades.1.grade":'A',"grades.1.date":ISODate("2014-08-11T00:00:00.000Z"),"grades.1.score":9},{"restaurant_id":1,"name":1,"grades":1})
 ```
+
+24. Escribe una función find() para encontrar el ID del restaurante, el nombre, la dirección y la ubicación geográfica para aquellos restaurantes donde el segundo elemento de la matriz de coordenadas contiene un valor que sea más de 42 y hasta 52 ..
+
+```javascript
+db.restaurants.find({"address.coord.1":{$gte:42,$lte:52}},{"restaurant_id":1,"name":1,"address":1})
+```
+
+25. Escribe una función find() para organizar el nombre de los restaurantes en orden ascendente junto con todas las columnas.
+
+```javascript
+db.restaurants.find().sort({"name":1})
+```
+
+26. Escribe una función find() para organizar el nombre de los restaurantes en orden descendente junto con todas las columnas.
+
+```javascript
+db.restaurants.find().sort({"name":-1})
+```
+
+27. Escribe una función find() para organizar el nombre de la cocina en orden ascendente y para ese mismo distrito de cocina debe estar en orden descendente.
+
+```javascript
+db.restaurants.find().sort({"cuisine":1,"borough":-1})
+```
+
+28. Escribe una función find() para saber si todas las direcciones contienen la calle o no.
