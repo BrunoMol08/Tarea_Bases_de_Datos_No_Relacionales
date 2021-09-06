@@ -37,7 +37,7 @@ db.restaurants.find({"name":/Reg/},{"restaurant_id":1, "name":1, "borough":1, "c
 17. Escribe una función find() para encontrar los restaurantes que pertenecen al municipio del Bronx y que prepararon platos estadounidenses o chinos.
 
 ```javascript
-db.restaurants.find({"borough":'Bronx', "cuisine":/^(American|Hamburgers|Chinese)/},{"borough":1, "cuisine":1})
+db.restaurants.find({"borough":'Bronx', "cuisine":/^(American $|Hamburgers$|Chinese$)/},{"borough":1, "cuisine":1})
 ```
 
 > Se contemplo 'Hamburgers' en este caso, puesto que, es comida americana.
