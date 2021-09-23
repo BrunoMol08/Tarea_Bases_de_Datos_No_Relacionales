@@ -142,7 +142,7 @@ mongoimport -d trainingsessions -c countries --type CSV --file /home/bruno/Desca
 ```
 > En este momento, ya tenemos la nueva base de datos en mongodb.
 
-Si se quiere consultar la base de datos, aquí está el link en [GitHub]https://github.com/BrunoMol08/Tarea_Bases_de_Datos_No_Relacionales/blob/main/zona_horaria_corregida.csv
+Si se quiere consultar la base de datos, aquí está el link en https://github.com/BrunoMol08/Tarea_Bases_de_Datos_No_Relacionales/blob/main/zona_horaria_corregida.csv
 
 6. En intervalos de 7:00:00pm a 6:59:59am y de 7:00:00am a 6:59:59pm, de qué paises la mayoría de los tuits?
 
