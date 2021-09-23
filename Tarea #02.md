@@ -89,9 +89,51 @@ Se puede concluir, que los tuiteros hispanohablantes interactúan más en la noc
 
 6. En intervalos de 7:00:00pm a 6:59:59am y de 7:00:00am a 6:59:59pm, de qué paises la mayoría de los tuits?
 
+En esta primera consulta vamos a analizar los tweets, en el intervalo de 7:00:00pm a 6:59:59am, para conocer de qué país es la mayoría.
 ```javascript
-
+db.tweets.aggregate([
+  {$lookup: {from:"primarydialects","localField":"user.lang","foreignField":"lang","as":"language"}},
+  {$lookup: {from:"languagenames","localField":"language.locale","foreignField":"locale","as":"fulllocale"}},
+  {$match:{"created_at":/^[A-Z]+[a-z]{1,2}\s+[A-Z]+[a-z]{1,2}\s+[0-9]{1,2}\s+([1]+[9]|[2]+[0-3]|[0]+[0-6])+:+[0-5]+[0-9]+:+[0-5]+[0-9].........../}},
+  {$group: {_id:"$fulllocale.languages", "conteo": {$count:{}}}}
+])
 ```
+
+Esto nos arroja los siguientes resultados.
+```javascript
+[
+  { _id: [ [ 'Español (España)', 'Spanish (Spain)' ] ], conteo: 1407 },
+  { _id: [ [ '日本語', 'Japanese' ] ], conteo: 850 },
+  { _id: [ [ 'Français (France)', 'French (France)' ] ], conteo: 107 },
+  { _id: [ [ 'Italiano', 'Italian' ] ], conteo: 68 },
+  { _id: [ [ 'English (US)', 'English (US)' ] ], conteo: 11410 },
+  { _id: [ [ 'Deutsch (Deutschland)', 'German (Germany)' ] ], conteo: 142 }
+]
+```
+> Se puede corroborar que la mayoría de los tweets provienen de Estados Unidos en ese intervalo, seguido de España.
+
+En esta segunda consulta vamos a analizar los tweets, en el intervalo de 7:00:00am a 6:59:59pm, para conocer de que país es la mayoría.
+```javascript
+db.tweets.aggregate([
+  {$lookup: {from:"primarydialects","localField":"user.lang","foreignField":"lang","as":"language"}},
+  {$lookup: {from:"languagenames","localField":"language.locale","foreignField":"locale","as":"fulllocale"}},
+  {$match:{"created_at":/^[A-Z]+[a-z]{1,2}\s+[A-Z]+[a-z]{1,2}\s+[0-9]{1,2}\s+([0]+[7-9]|[1]+[0-8])+:+[0-5]+[0-9]+:+[0-5]+[0-9].........../}},
+  {$group: {_id:"$fulllocale.languages", "conteo": {$count:{}}}}
+])
+```
+
+Esto nos arroja los siguientes resultados.
+```javascript
+[
+  { _id: [ [ 'Español (España)', 'Spanish (Spain)' ] ], conteo: 978 },
+  { _id: [ [ '日本語', 'Japanese' ] ], conteo: 845 },
+  { _id: [ [ 'Italiano', 'Italian' ] ], conteo: 46 },
+  { _id: [ [ 'Français (France)', 'French (France)' ] ], conteo: 94 },
+  { _id: [ [ 'English (US)', 'English (US)' ] ], conteo: 8795 },
+  { _id: [ [ 'Deutsch (Deutschland)', 'German (Germany)' ] ], conteo: 90 }
+]
+```
+>Se puede corroborar, igual que en el caso anterior, que la mayoría de los tweets, en el intervalo, provienen de Estados Unidos, seguido de España.
 
 7. De qué país son los tuiteros más famosos de nuestra colección?
 
