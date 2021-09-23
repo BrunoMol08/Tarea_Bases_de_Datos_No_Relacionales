@@ -46,7 +46,7 @@ db.tweets.aggregate([
 
 4. Cómo podemos saber si los tuiteros hispanohablantes interactúan más en las noches?
 
-Primero, vamos a contar cuantos tweets tenemos de los hispanohablantes
+Por la definición de hispanohablante, sabemos que es una persona que habla bien el español o es su lengua materna. Por lo tanto, podemos considerar los tweets en idioma español como tweets de hispanohablantes. Seguido de esto, vamos a contar cuantos tweets tenemos de los hispanohablantes
 ```javascript
 db.tweets.aggregate([
 {$lookup: {from:"primarydialects","localField":"user.lang","foreignField":"lang","as":"language"}},
@@ -83,9 +83,42 @@ Se puede concluir, que los tuiteros hispanohablantes interactúan más en la noc
 
 5. Cómo podemos saber de dónde son los tuiteros que más tiempo tienen en la plataforma?
 
-```javascript
+``` javascript
 
 ```
+
+Para poder contestar las demás preguntas, vamos a estar siguiendo una serie de pasos, para manejar una nueva colección de zonas horarias junto con su respectivo país. Además, de que se le va a ser una limpieza a esos datos.
+
+1. Primero, vamos a copiar la tabla de zonas horarias con su respectivo país de la página https://www.zeitverschiebung.net/es/all-time-zones.html, dentro de un archivo .csv al cual nombraremos zona_horaria.csv.
+
+> Vamos a tener un archivo así, con 424 líneas
+```
+Zona horaria,País
+Pacific/Midway,United States
+Pacific/Niue,Niue
+Pacific/Pago_Pago,American Samoa
+America/Adak,United States
+Pacific/Honolulu,United States
+Pacific/Rarotonga,Cook Islands
+Pacific/Tahiti,French Polynesia
+Pacific/Marquesas,French Polynesia
+America/Anchorage,United States
+America/Juneau,United States
+America/Metlakatla,United States
+America/Nome,United States
+America/Sitka,United States
+America/Yakutat,United States
+Pacific/Gambier,French Polynesia
+...
+```
+
+2. Después, debemos limpiar esos datos para quitarles el continente al que pertenece y tener solamente, la zona horaria y su país. Corremos los siguientes códigos sobre el archivo.
+
+```
+
+```
+
+
 
 6. En intervalos de 7:00:00pm a 6:59:59am y de 7:00:00am a 6:59:59pm, de qué paises la mayoría de los tuits?
 
