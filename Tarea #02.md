@@ -77,4 +77,6 @@ db.tweets.aggregate([
   {$group: {_id:"$fulllocale.languages", "conteo": {$count:{}}}}
 ])
 ```
-> Esto nos dice, que 978 tweets de los hispanohablantes fueron publicados en un horario distinto al de la noche. 
+> Esto nos dice, que 978 tweets de los hispanohablantes fueron publicados en un horario distinto al de la noche.
+
+Se puede concluir, que los tuiteros hispanohablantes interactúan más en la noche. 
