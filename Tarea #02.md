@@ -45,3 +45,36 @@ db.tweets.aggregate([
 ```
 
 4. Cómo podemos saber si los tuiteros hispanohablantes interactúan más en las noches?
+
+Primero, vamos a contar cuantos tweets tenemos de los hispanohablantes
+```javascript
+db.tweets.aggregate([
+{$lookup: {from:"primarydialects","localField":"user.lang","foreignField":"lang","as":"language"}},
+{$lookup: {from:"languagenames","localField":"language.locale","foreignField":"locale","as":"fulllocale"}},
+{$match:{"user.lang":'es'}},
+{$group: {_id:"$fulllocale.languages", "conteo": {$count:{}}}}
+])
+```
+> Esto nos dice, que tenemos 2385 tweets de hispanohablantes.
+
+Después, con está consulta vamos a contar el numero de tweets de los hispanohablantes que fueron publicados, desde las 19 horas hasta las 23:59:59, consideraron que ese lapso de tiempo es noche.
+```javascript
+db.tweets.aggregate([
+  {$lookup: {from:"primarydialects","localField":"user.lang","foreignField":"lang","as":"language"}},
+  {$lookup: {from:"languagenames","localField":"language.locale","foreignField":"locale","as":"fulllocale"}},
+  {$match:{"user.lang":'es',"created_at":/^[A-Z]+[a-z]{1,2}\s+[A-Z]+[a-z]{1,2}\s+[0-9]{1,2}\s+([1]+[9]|[2]+[0-3])+:+[0-5]+[0-9]+:+[0-5]+[0-9].........../}},
+  {$group: {_id:"$fulllocale.languages", "conteo": {$count:{}}}}
+])
+```
+> Esto nos dice, que 1407 tweets de los hispanohablantes son en la noche, es decir el 59% de los tweets fueron publicados en la noche.
+
+Para corroborar, que el restante de los tweets fue publicado en otro horario hacemos está consulta.
+```javascript
+db.tweets.aggregate([
+  {$lookup: {from:"primarydialects","localField":"user.lang","foreignField":"lang","as":"language"}},
+  {$lookup: {from:"languagenames","localField":"language.locale","foreignField":"locale","as":"fulllocale"}},
+  {$match:{"user.lang":'es',"created_at":/^[A-Z]+[a-z]{1,2}\s+[A-Z]+[a-z]{1,2}\s+[0-9]{1,2}\s+([0]+[1-9]|[1]+[0-8])+:+[0-5]+[0-9]+:+[0-5]+[0-9].........../}},
+  {$group: {_id:"$fulllocale.languages", "conteo": {$count:{}}}}
+])
+```
+> Esto nos dice, que 978 tweets de los hispanohablantes fueron publicados en un horario distinto al de la noche. 
