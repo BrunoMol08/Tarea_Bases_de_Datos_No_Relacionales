@@ -95,6 +95,14 @@ Se puede concluir, que los tuiteros hispanohablantes interactúan más en la noc
 
 7. De qué país son los tuiteros más famosos de nuestra colección?
 
+Esta consulta nos va a arrojar a los 15 más seguidos en twitter, con su respectivo país y la cantidad de seguidores.
 ```javascript
-
+db.tweets.aggregate([
+  {$lookup: {from:"primarydialects","localField":"user.lang","foreignField":"lang","as":"language"}},
+  {$lookup: {from:"languagenames","localField":"language.locale","foreignField":"locale","as":"fulllocale"}},
+  {$group: {_id:{"país":"$fulllocale.languages","seguidores":"$user.friends_count"}}},
+  {$sort: {"_id.seguidores":-1}},
+  {$limit : 15}
+])
 ```
+> Podemos ver, que los 15 tuiteros más famosos de nuestra colección provienen de Estados Unidos (US).
