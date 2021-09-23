@@ -87,38 +87,62 @@ Se puede concluir, que los tuiteros hispanohablantes interactúan más en la noc
 
 ```
 
-Para poder contestar las demás preguntas, vamos a estar siguiendo una serie de pasos, para manejar una nueva colección de zonas horarias junto con su respectivo país. Además, de que se le va a ser una limpieza a esos datos.
+Para poder contestar las demás preguntas, vamos a estar siguiendo una serie de pasos para manejar una nueva colección de zonas horarias junto con su respectivo país. Además, de que se le va a ser una limpieza a esos datos.
 
-1. Primero, vamos a copiar la tabla de zonas horarias con su respectivo país de la página https://www.zeitverschiebung.net/es/all-time-zones.html, dentro de un archivo .csv al cual nombraremos zona_horaria.csv.
+     Primero, vamos a copiar la tabla de zonas horarias con su respectivo país de la página https://www.zeitverschiebung.net/es/all-time-zones.html, dentro de un archivo .csv al cual nombraremos zona_horaria.csv.
 
-> Vamos a tener un archivo así, con 424 líneas
-```
-Zona horaria,País
-Pacific/Midway,United States
-Pacific/Niue,Niue
-Pacific/Pago_Pago,American Samoa
-America/Adak,United States
-Pacific/Honolulu,United States
-Pacific/Rarotonga,Cook Islands
-Pacific/Tahiti,French Polynesia
-Pacific/Marquesas,French Polynesia
-America/Anchorage,United States
-America/Juneau,United States
-America/Metlakatla,United States
-America/Nome,United States
-America/Sitka,United States
-America/Yakutat,United States
-Pacific/Gambier,French Polynesia
-...
-```
+    > Vamos a tener un archivo así, con 424 líneas
+    ```
+    Zona horaria,País
+    Pacific/Midway,United States
+    Pacific/Niue,Niue
+    Pacific/Pago_Pago,American Samoa
+    America/Adak,United States
+    Pacific/Honolulu,United States
+    Pacific/Rarotonga,Cook Islands
+    Pacific/Tahiti,French Polynesia
+    Pacific/Marquesas,French Polynesia
+    America/Anchorage,United States
+    America/Juneau,United States
+    America/Metlakatla,United States
+    America/Nome,United States
+    America/Sitka,United States
+    America/Yakutat,United States
+    Pacific/Gambier,French Polynesia
+    ...
+    ```
 
-2. Después, debemos limpiar esos datos para quitarles el continente al que pertenece y tener solamente, la zona horaria y su país. Corremos los siguientes códigos sobre el archivo.
+     Después, debemos limpiar esos datos para quitarles el continente al que pertenece y tener solamente, la zona horaria y su país de forma que lo podamos cargar a mongodb. Corremos los siguientes códigos sobre el archivo.
 
-```
+    ```
+    sed -e 's/^Pacific.//gI' zona_horaria.csv | sed -e 's/^America.//gI' | sed -e 's/^Atlantic.//gI' | sed -e 's/^Antarctica.//gI' | sed -e 's/^Africa.//gI' | sed -e 's/^Europe.//gI' | sed -e 's/^Asia.//gI' | sed -e 's/^Indian.//gI' | sed -e 's/^Australia.//gI' | sed -e 's/^America.Argentina.//gI' | sed -e 's/^America.Kentucky.//gI' | sed -e 's/^America.Indiana.//gI' | sed -e 's/^America.North_Dakota.//gI' > zona_horaria_1.csv
+    ```
 
-```
+    > Después, hacemos esta otra modificación.
+    ```
+    sed -e 's/^Argentina.//gI' zona_horaria_1.csv | sed -e 's/^Arctic.//gI' | sed -e 's/^Kentucky.//gI' | sed -e 's/^North_Dakota//gI' | sed -e 's/\///gI' > zona_horaria_2.csv
+    ```
 
+    > Vamos a hacer que los '_' sea espacios en nuestro archivo
+    ```
+    sed -e 's/_/ /gI' zona_horaria_2.csv > zona_horaria_limpia.csv
+    ```
+    > Ya tenemos limpio el archivo.
 
+    Después, vamos a preparar el archivo para que lo podamos subir a mongodb.
+
+    ```
+    sed -e 's/^Zona\sHoraria,País/time_zone,country/gI' zona_horaria_limpia.csv > zona_horaria_corregida.csv
+    ```
+
+    Ahora vamos a hacer uso de un mongoimport que nos permite subir un archivo .csv
+
+    ```
+    mongoimport -d trainingsessions -c countries --type CSV --file /home/bruno/Descargas/zona_horaria_corregida.csv --headerline
+    ```
+    > En este momento, ya tenemos la nueva base de datos en mongodb.
+
+    Si se quiere consultar la base de datos, aquí está el link en [GitHub]https://github.com/BrunoMol08/Tarea_Bases_de_Datos_No_Relacionales/blob/main/zona_horaria_corregida.csv
 
 6. En intervalos de 7:00:00pm a 6:59:59am y de 7:00:00am a 6:59:59pm, de qué paises la mayoría de los tuits?
 
