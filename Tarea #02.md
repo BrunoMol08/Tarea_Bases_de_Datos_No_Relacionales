@@ -79,4 +79,22 @@ db.tweets.aggregate([
 ```
 > Esto nos dice, que 978 tweets de los hispanohablantes fueron publicados en un horario distinto al de la noche.
 
-Se puede concluir, que los tuiteros hispanohablantes interactúan más en la noche. 
+Se puede concluir, que los tuiteros hispanohablantes interactúan más en la noche.
+
+5. Cómo podemos saber de dónde son los tuiteros que más tiempo tienen en la plataforma?
+
+```javascript
+
+```
+
+6. En intervalos de 7:00:00pm a 6:59:59am y de 7:00:00am a 6:59:59pm, de qué paises la mayoría de los tuits?
+
+```javascript
+
+```
+
+7. De qué país son los tuiteros más famosos de nuestra colección?
+
+```javascript
+
+```
