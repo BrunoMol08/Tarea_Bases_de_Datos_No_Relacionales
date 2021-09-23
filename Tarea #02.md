@@ -99,7 +99,7 @@ db.tweets.aggregate([
 ])
 ```
 
-Esto nos arroja los siguientes resultados.
+Esto nos arroja los siguientes resultados:
 ```javascript
 [
   { _id: [ [ 'Español (España)', 'Spanish (Spain)' ] ], conteo: 1407 },
@@ -122,7 +122,7 @@ db.tweets.aggregate([
 ])
 ```
 
-Esto nos arroja los siguientes resultados.
+Esto nos arroja los siguientes resultados:
 ```javascript
 [
   { _id: [ [ 'Español (España)', 'Spanish (Spain)' ] ], conteo: 978 },
@@ -146,5 +146,101 @@ db.tweets.aggregate([
   {$sort: {"_id.seguidores":-1}},
   {$limit : 15}
 ])
+```
+
+Esto nos arroja los siguientes resultados:
+```javascript
+[
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 295035
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 52031
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 51869
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 50513
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 39464
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 37195
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 37076
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 35951
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 31532
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 30857
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 30756
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 30558
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 28142
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 28045
+    }
+  },
+  {
+    _id: {
+      'país': [ [ 'English (US)', 'English (US)' ] ],
+      seguidores: 27231
+    }
+  }
+]
 ```
 > Podemos ver, que los 15 tuiteros más famosos de nuestra colección provienen de Estados Unidos (US).
