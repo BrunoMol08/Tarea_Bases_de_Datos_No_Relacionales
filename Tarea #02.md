@@ -91,7 +91,7 @@ Para poder contestar las demás preguntas, vamos a estar siguiendo una serie de 
 
  Primero, vamos a copiar la tabla de zonas horarias con su respectivo país de la página https://www.zeitverschiebung.net/es/all-time-zones.html, dentro de un archivo .csv al cual nombraremos zona_horaria.csv.
 
-> Vamos a tener un archivo así, con 424 líneas
+> Vamos a tener un archivo así, con 429 líneas
 ```
 Zona horaria,País
 Pacific/Midway,United States
@@ -142,64 +142,96 @@ mongoimport -d trainingsessions -c countries --type CSV --file /home/bruno/Desca
 ```
 > En este momento, ya tenemos la nueva base de datos en mongodb.
 
-Si se quiere consultar la base de datos, aquí está el link en https://github.com/BrunoMol08/Tarea_Bases_de_Datos_No_Relacionales/blob/main/zona_horaria_corregida.csv
+Si se quiere consultar la base de datos, aquí está el link en
 
 6. En intervalos de 7:00:00pm a 6:59:59am y de 7:00:00am a 6:59:59pm, de qué paises la mayoría de los tuits?
 
 En esta primera consulta vamos a analizar los tweets, en el intervalo de 7:00:00pm a 6:59:59am, para conocer de qué país es la mayoría.
 ```javascript
 db.tweets.aggregate([
-  {$lookup: {from:"primarydialects","localField":"user.lang","foreignField":"lang","as":"language"}},
-  {$lookup: {from:"languagenames","localField":"language.locale","foreignField":"locale","as":"fulllocale"}},
+  {$lookup: {from:"countries","localField":"user.time_zone","foreignField":"time_zone","as":"countryy"}},
   {$match:{"created_at":/^[A-Z]+[a-z]{1,2}\s+[A-Z]+[a-z]{1,2}\s+[0-9]{1,2}\s+([1]+[9]|[2]+[0-3]|[0]+[0-6])+:+[0-5]+[0-9]+:+[0-5]+[0-9].........../}},
-  {$group: {_id:"$fulllocale.languages", "conteo": {$count:{}}}}
+  {$group: {_id:"$countryy.country", "conteo": {$count:{}}}},
+  {$sort: {"conteo":-1}}
 ])
 ```
 
-Esto nos arroja los siguientes resultados:
+Esto nos arroja la siguiente lista de resultados:
 ```javascript
 [
-  { _id: [ [ 'Español (España)', 'Spanish (Spain)' ] ], conteo: 1407 },
-  { _id: [ [ '日本語', 'Japanese' ] ], conteo: 850 },
-  { _id: [ [ 'Français (France)', 'French (France)' ] ], conteo: 107 },
-  { _id: [ [ 'Italiano', 'Italian' ] ], conteo: 68 },
-  { _id: [ [ 'English (US)', 'English (US)' ] ], conteo: 11410 },
-  { _id: [ [ 'Deutsch (Deutschland)', 'German (Germany)' ] ], conteo: 142 }
+  { _id: [], conteo: 4761 },
+  { _id: [ 'United States or Canada' ], conteo: 3593 },
+  { _id: [ 'Brazil' ], conteo: 1312 },
+  { _id: [ 'Chile' ], conteo: 1117 },
+  { _id: [ 'United Kingdom' ], conteo: 607 },
+  { _id: [ 'Japan' ], conteo: 552 },
+  { _id: [ 'Netherlands' ], conteo: 323 },
+  { _id: [ 'Venezuela' ], conteo: 189 },
+  { _id: [ 'Mexico' ], conteo: 183 },
+  { _id: [ 'Germany' ], conteo: 145 },
+  { _id: [ 'Indonesia' ], conteo: 139 },
+  { _id: [ 'Argentina' ], conteo: 127 },
+  { _id: [ 'France' ], conteo: 126 },
+  { _id: [ 'Spain' ], conteo: 109 },
+  { _id: [ 'Italy' ], conteo: 56 },
+  { _id: [ 'Russia' ], conteo: 48 },
+  { _id: [ 'Turkey' ], conteo: 48 },
+  { _id: [ 'Sweden' ], conteo: 38 },
+  { _id: [ 'Ireland' ], conteo: 33 },
+  { _id: [ 'Colombia' ], conteo: 31 },
+  ...
 ]
 ```
-> Se puede corroborar que la mayoría de los tweets provienen de Estados Unidos en ese intervalo, seguido de España.
+> El espacio [] quiere decir, o que no encontró el país o estaba en null el dato.
+> Se puede corroborar, igual que en el caso anterior, que la mayoría de los tweets, en el intervalo, provienen de Estados Unidos o Canadá, seguido de Brasil.
 
 En esta segunda consulta vamos a analizar los tweets, en el intervalo de 7:00:00am a 6:59:59pm, para conocer de que país es la mayoría.
 ```javascript
 db.tweets.aggregate([
-  {$lookup: {from:"primarydialects","localField":"user.lang","foreignField":"lang","as":"language"}},
-  {$lookup: {from:"languagenames","localField":"language.locale","foreignField":"locale","as":"fulllocale"}},
+  {$lookup: {from:"countries","localField":"user.time_zone","foreignField":"time_zone","as":"countryy"}},
   {$match:{"created_at":/^[A-Z]+[a-z]{1,2}\s+[A-Z]+[a-z]{1,2}\s+[0-9]{1,2}\s+([0]+[7-9]|[1]+[0-8])+:+[0-5]+[0-9]+:+[0-5]+[0-9].........../}},
-  {$group: {_id:"$fulllocale.languages", "conteo": {$count:{}}}}
+  {$group: {_id:"$countryy.country", "conteo": {$count:{}}}},
+  {$sort: {"conteo":-1}}
 ])
 ```
 
 Esto nos arroja los siguientes resultados:
 ```javascript
 [
-  { _id: [ [ 'Español (España)', 'Spanish (Spain)' ] ], conteo: 978 },
-  { _id: [ [ '日本語', 'Japanese' ] ], conteo: 845 },
-  { _id: [ [ 'Italiano', 'Italian' ] ], conteo: 46 },
-  { _id: [ [ 'Français (France)', 'French (France)' ] ], conteo: 94 },
-  { _id: [ [ 'English (US)', 'English (US)' ] ], conteo: 8795 },
-  { _id: [ [ 'Deutsch (Deutschland)', 'German (Germany)' ] ], conteo: 90 }
+  { _id: [], conteo: 3705 },
+  { _id: [ 'United States or Canada' ], conteo: 2806 },
+  { _id: [ 'Brazil' ], conteo: 1009 },
+  { _id: [ 'Chile' ], conteo: 775 },
+  { _id: [ 'Japan' ], conteo: 564 },
+  { _id: [ 'United Kingdom' ], conteo: 449 },
+  { _id: [ 'Netherlands' ], conteo: 179 },
+  { _id: [ 'Indonesia' ], conteo: 170 },
+  { _id: [ 'Mexico' ], conteo: 142 },
+  { _id: [ 'Venezuela' ], conteo: 125 },
+  { _id: [ 'Germany' ], conteo: 119 },
+  { _id: [ 'France' ], conteo: 90 },
+  { _id: [ 'Argentina' ], conteo: 85 },
+  { _id: [ 'Spain' ], conteo: 63 },
+  { _id: [ 'South Korea' ], conteo: 40 },
+  { _id: [ 'Italy' ], conteo: 39 },
+  { _id: [ 'Russia' ], conteo: 37 },
+  { _id: [ 'Singapore' ], conteo: 32 },
+  { _id: [ 'Belgium' ], conteo: 30 },
+  { _id: [ 'Turkey' ], conteo: 28 },
+  ...
 ]
+
 ```
->Se puede corroborar, igual que en el caso anterior, que la mayoría de los tweets, en el intervalo, provienen de Estados Unidos, seguido de España.
+> El espacio [] quiere decir, o que no encontró el país o estaba en null el dato.
+>Se puede corroborar, igual que en el caso anterior, que la mayoría de los tweets, en el intervalo, provienen de Estados Unidos o Canadá, seguido de Brasil.
 
 7. De qué país son los tuiteros más famosos de nuestra colección?
 
 Esta consulta nos va a arrojar a los 15 más seguidos en twitter, con su respectivo país y la cantidad de seguidores.
 ```javascript
 db.tweets.aggregate([
-  {$lookup: {from:"primarydialects","localField":"user.lang","foreignField":"lang","as":"language"}},
-  {$lookup: {from:"languagenames","localField":"language.locale","foreignField":"locale","as":"fulllocale"}},
-  {$group: {_id:{"país":"$fulllocale.languages","seguidores":"$user.friends_count"}}},
+  {$lookup: {from:"countries","localField":"user.time_zone","foreignField":"time_zone","as":"countryy"}},
+  {$group: {_id:{"país":"$countryy.country","seguidores":"$user.friends_count"}}},
   {$sort: {"_id.seguidores":-1}},
   {$limit : 15}
 ])
@@ -208,96 +240,21 @@ db.tweets.aggregate([
 Esto nos arroja los siguientes resultados:
 ```javascript
 [
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 295035
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 52031
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 51869
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 50513
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 39464
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 37195
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 37076
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 35951
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 31532
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 30857
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 30756
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 30558
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 28142
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 28045
-    }
-  },
-  {
-    _id: {
-      'país': [ [ 'English (US)', 'English (US)' ] ],
-      seguidores: 27231
-    }
-  }
+  { _id: { 'país': [ 'United States or Canada' ], seguidores: 295035 } },
+  { _id: { 'país': [ 'United States or Canada' ], seguidores: 52031 } },
+  { _id: { 'país': [ 'United States or Canada' ], seguidores: 51869 } },
+  { _id: { 'país': [ 'United States or Canada' ], seguidores: 50513 } },
+  { _id: { 'país': [ 'Brazil' ], seguidores: 39464 } },
+  { _id: { 'país': [ 'United States or Canada' ], seguidores: 37195 } },
+  { _id: { 'país': [ 'United Kingdom' ], seguidores: 37076 } },
+  { _id: { 'país': [ 'Venezuela' ], seguidores: 35951 } },
+  { _id: { 'país': [ 'United States or Canada' ], seguidores: 31532 } },
+  { _id: { 'país': [ 'United States or Canada' ], seguidores: 30857 } },
+  { _id: { 'país': [ 'United States or Canada' ], seguidores: 30756 } },
+  { _id: { 'país': [ 'United States or Canada' ], seguidores: 30558 } },
+  { _id: { 'país': [ 'Brazil' ], seguidores: 28142 } },
+  { _id: { 'país': [ 'Brazil' ], seguidores: 28045 } },
+  { _id: { 'país': [ 'United States or Canada' ], seguidores: 27231 } }
 ]
 ```
-> Podemos ver, que los 15 tuiteros más famosos de nuestra colección provienen de Estados Unidos (US).
+> Podemos ver, que la mayoría de los tuiteros más famosos de nuestra colección provienen de Estados Unidos o de Canadá.
