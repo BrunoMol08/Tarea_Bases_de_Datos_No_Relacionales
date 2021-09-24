@@ -83,8 +83,161 @@ Se puede concluir, que los tuiteros hispanohablantes interactúan más en la noc
 
 5. Cómo podemos saber de dónde son los tuiteros que más tiempo tienen en la plataforma?
 
+Como la fecha es un String, por lo tanto, vamos a usar la función _$toDate_ que convierte una fecha de String a ISODate y así poder ver quienes son los que tienen más tiempo en la plataforma.
 ``` javascript
+db.tweets.aggregate([
+    {"$addFields": { "user.created_at": { "$toDate": "$user.created_at" }}},
+    {$lookup: {from:"countries","localField":"user.time_zone","foreignField":"time_zone","as":"countryy"}},
+    {$group: {_id:{"user_created_at":"$user.created_at","location":"$user.location","country":"$countryy.country"}}},
+    {$sort: {"_id.user_created_at":1}}
+])
+```
 
+Lo cual nos devuelve la siguiente lista de los tuiteros más viejos en la plataforma:
+```
+[
+  {
+    _id: {
+      user_created_at: ISODate("2006-07-25T18:52:43.000Z"),
+      location: 'New York, NY',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2006-09-06T14:19:01.000Z"),
+      location: 'Milwaukee',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2006-10-05T23:59:57.000Z"),
+      location: 'San Francisco, CA',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2006-10-09T16:14:01.000Z"),
+      location: 'Phoenix, AZ',
+      country: []
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2006-11-06T17:33:46.000Z"),
+      location: 'San Francisco, CA',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2006-11-17T16:19:25.000Z"),
+      location: 'Chile',
+      country: [ 'Chile' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2006-11-23T19:29:11.000Z"),
+      location: 'PDX / NYC / SFO / DCA',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2006-12-05T19:42:23.000Z"),
+      location: 'the future (aka hartford)',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2006-12-15T16:52:33.000Z"),
+      location: '',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2006-12-23T01:46:33.000Z"),
+      location: 'Santiago, Chile',
+      country: [ 'Chile' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2006-12-24T17:22:48.000Z"),
+      location: 'Long Island, New York',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2006-12-31T17:53:30.000Z"),
+      location: '',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2007-01-06T23:44:09.000Z"),
+      location: 'Stanford, CA',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2007-01-07T17:59:56.000Z"),
+      location: 'Portland, Maine, US',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2007-01-15T21:39:43.000Z"),
+      location: 'Munich, Germany',
+      country: [ 'Germany' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2007-01-16T03:50:08.000Z"),
+      location: 'a tree in Laguna Beach',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2007-01-16T03:51:28.000Z"),
+      location: 'Queenstown, MD',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2007-01-18T23:35:47.000Z"),
+      location: 'USA',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2007-01-19T16:35:58.000Z"),
+      location: 'Palo Alto, CA',
+      country: [ 'Iran' ]
+    }
+  },
+  {
+    _id: {
+      user_created_at: ISODate("2007-01-21T10:15:52.000Z"),
+      location: 'San Francisco',
+      country: [ 'United States or Canada' ]
+    }
+  },
+  ...
+]
 ```
 
 # Collección nueva
