@@ -87,7 +87,7 @@ Se puede concluir, que los tuiteros hispanohablantes interactúan más en la noc
 
 ```
 
-Para poder contestar las demás preguntas, vamos a estar siguiendo una serie de pasos para manejar una nueva colección de zonas horarias junto con su respectivo país. Además, de que se le va a ser una limpieza a esos datos.
+Para poder contestar las demás preguntas, vamos a estar siguiendo una serie de pasos para manejar una nueva colección de zonas horarias junto con su respectivo país. Además, se le va a ser una limpieza a esos datos.
 
  Primero, vamos a copiar la tabla de zonas horarias con su respectivo país de la página https://www.zeitverschiebung.net/es/all-time-zones.html, dentro de un archivo .csv al cual nombraremos zona_horaria.csv.
 
