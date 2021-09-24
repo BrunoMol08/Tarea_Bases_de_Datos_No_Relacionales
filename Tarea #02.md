@@ -86,7 +86,7 @@ Se puede concluir, que los tuiteros hispanohablantes interactúan más en la noc
 Como la fecha es un String, por lo tanto, vamos a usar la función _$toDate_ que convierte una fecha de String a ISODate y así poder ver quienes son los que tienen más tiempo en la plataforma.
 ``` javascript
 db.tweets.aggregate([
-    {"$addFields": { "user.created_at": { "$toDate": "$user.created_at" }}},
+    {$addFields: { "user.created_at": { "$toDate": "$user.created_at" }}},
     {$lookup: {from:"countries","localField":"user.time_zone","foreignField":"time_zone","as":"countryy"}},
     {$group: {_id:{"user_created_at":"$user.created_at","location":"$user.location","country":"$countryy.country"}}},
     {$sort: {"_id.user_created_at":1}}
