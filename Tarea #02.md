@@ -385,7 +385,7 @@ Esta consulta nos va a arrojar a los 15 más seguidos en twitter, con su respect
 ```javascript
 db.tweets.aggregate([
   {$lookup: {from:"countries","localField":"user.time_zone","foreignField":"time_zone","as":"countryy"}},
-  {$group: {_id:{"país":"$countryy.country","seguidores":"$user.friends_count"}}},
+  {$group: {_id:{"país":"$countryy.country","seguidores":"$user.followers_count"}}},
   {$sort: {"_id.seguidores":-1}},
   {$limit : 15}
 ])
